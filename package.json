@@ -1,0 +1,45 @@
+{
+  "name": "requerimento-matricula",
+  "productName": "Requerimento de Matrícula",
+  "version": "1.0.0",
+  "description": "Aplicativo para preencher e imprimir o Requerimento de Matrícula e Identificação Escolar",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "br.escola.requerimento-matricula",
+    "productName": "Requerimento de Matrícula",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Requerimento de Matrícula"
+    }
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "allowScripts": {
+    "electron@33.4.11": true
+  }
+}

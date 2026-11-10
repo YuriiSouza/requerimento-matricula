@@ -1,0 +1,42 @@
+name: Release
+
+# Para lançar uma versão nova:
+#   1. mude "version" no package.json (ex.: 1.0.1)
+#   2. git commit -am "Versão 1.0.1" && git tag v1.0.1 && git push --follow-tags
+# O GitHub gera o instalador do Windows e publica na página de Releases.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Conferir versão da tag
+        shell: bash
+        run: |
+          VERSAO=$(node -p "require('./package.json').version")
+          if [ "v$VERSAO" != "$GITHUB_REF_NAME" ]; then
+            echo "A tag ($GITHUB_REF_NAME) não bate com a versão do package.json (v$VERSAO)."
+            exit 1
+          fi
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Gerar instalador e publicar release
+        run: npm run release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

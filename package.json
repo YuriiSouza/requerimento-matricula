@@ -3,10 +3,17 @@
   "productName": "Requerimento de Matrícula",
   "version": "1.0.0",
   "description": "Aplicativo para preencher e imprimir o Requerimento de Matrícula e Identificação Escolar",
+  "author": "Yuri Peixoto",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YuriiSouza/requerimento-matricula.git"
+  },
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win",
+    "release": "electron-builder --win --publish always"
   },
   "build": {
     "appId": "br.escola.requerimento-matricula",
@@ -23,14 +30,23 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "artifactName": "Requerimento-Matricula-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "shortcutName": "Requerimento de Matrícula"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "YuriiSouza",
+        "repo": "requerimento-matricula",
+        "releaseType": "release"
+      }
+    ]
   },
   "dependencies": {
     "xlsx": "^0.18.5"

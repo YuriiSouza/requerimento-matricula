@@ -32,4 +32,15 @@ npm start
 npm run dist
 ```
 
-O instalador sai em `dist\Requerimento de Matrícula Setup <versão>.exe`.
+O instalador sai em `dist\Requerimento-Matricula-Setup-<versão>.exe`.
+
+## Lançar uma versão nova
+
+O GitHub Actions gera o instalador e publica na página de **Releases** sempre que uma tag `v*` é enviada:
+
+```bash
+npm version patch          # 1.0.0 -> 1.0.1 (cria o commit e a tag)
+git push --follow-tags
+```
+
+A tag precisa ser igual à versão do `package.json` (ex.: `v1.0.1`).

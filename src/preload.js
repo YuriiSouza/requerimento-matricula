@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
+  versao: () => ipcRenderer.invoke('app:versao'),
   lerDados: () => ipcRenderer.invoke('dados:ler'),
   salvarAluno: aluno => ipcRenderer.invoke('aluno:salvar', aluno),
   excluirAluno: id => ipcRenderer.invoke('aluno:excluir', id),

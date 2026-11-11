@@ -410,6 +410,7 @@ function abrirConfig() {
   $('#cfgPasta').value = c.proximaPasta || 1;
   logoTemp = c.logo || '';
   mostrarLogo();
+  window.api.versao().then(v => { $('#cfgVersao').textContent = `Versão ${v} — o programa se atualiza sozinho quando há internet.`; });
   $('#dlgConfig').showModal();
 }
 function mostrarLogo() {

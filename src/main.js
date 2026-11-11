@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { importarPlanilha } = require('./importar');
 const { gerarExemplos } = require('./exemplos');
+const { autoUpdater } = require('electron-updater');
 
 // Os dados ficam em Documentos\Matrículas Escolares — fácil de achar e de copiar para backup.
 const PASTA_DADOS = path.join(app.getPath('documents'), 'Matrículas Escolares');
@@ -67,7 +68,36 @@ function criarJanela() {
   janela.maximize();
 }
 
-app.whenReady().then(criarJanela);
+// ---------- Atualização automática ----------
+// Procura versão nova nas Releases do GitHub, baixa em segundo plano e pergunta se quer reiniciar.
+function configurarAtualizacao() {
+  if (!app.isPackaged) return; // rodando pelo "npm start": não atualiza
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true; // se escolher "Depois", instala ao fechar o app
+  autoUpdater.on('error', err => console.error('Atualização:', err && err.message));
+  autoUpdater.on('update-downloaded', async info => {
+    const r = await dialog.showMessageBox(janela, {
+      type: 'info',
+      buttons: ['Reiniciar agora', 'Depois'],
+      defaultId: 0,
+      cancelId: 1,
+      title: 'Atualização disponível',
+      message: `A versão ${info.version} do Requerimento de Matrícula já foi baixada.`,
+      detail: 'Salve o que estiver fazendo e clique em "Reiniciar agora" para usar a versão nova. Se preferir, ela será instalada quando você fechar o programa.'
+    });
+    if (r.response === 0) autoUpdater.quitAndInstall();
+  });
+  autoUpdater.checkForUpdates().catch(() => { /* sem internet: tenta na próxima vez */ });
+  // confere de novo a cada 4 horas, caso o app fique aberto o dia todo
+  setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 4 * 60 * 60 * 1000);
+}
+
+app.whenReady().then(() => {
+  criarJanela();
+  configurarAtualizacao();
+});
+
+ipcMain.handle('app:versao', () => app.getVersion());
 app.on('window-all-closed', () => app.quit());
 
 // ---------- Dados ----------

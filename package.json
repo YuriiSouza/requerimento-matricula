@@ -49,6 +49,7 @@
     ]
   },
   "dependencies": {
+    "electron-updater": "^6.3.9",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

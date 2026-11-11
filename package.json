@@ -1,7 +1,7 @@
 {
   "name": "requerimento-matricula",
   "productName": "Requerimento de Matrícula",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Aplicativo para preencher e imprimir o Requerimento de Matrícula e Identificação Escolar",
   "author": "Yuri Peixoto",
   "license": "UNLICENSED",
